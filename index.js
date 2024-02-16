@@ -1,9 +1,12 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+
 import userRoutes from './routes/users.js';
 import commentRoutes from './routes/comments.js';
 import videoRoutes from './routes/videos.js';
+import authRoutes from './routes/auth.js';
 
 const app = express();
 dotenv.config();
@@ -18,9 +21,26 @@ const connect = () => {
         })
 }
 
+// allows our app to send and receive cookies
+app.use(cookieParser())
+// this call allows app to take JSON requests as body
+app.use(express.json())
+
+app.use("/api/auth", authRoutes)
 app.use("/api/users", userRoutes)
 app.use("/api/comments", commentRoutes)
 app.use("/api/videos", videoRoutes)
+
+// Middleware for handling errors
+app.use((err, req, res, next) => {
+    const status = err.status || 500;
+    const message = err.message || 'Something went wrong';
+    return res.status(status).json({
+        success: false,
+        status,
+        message
+    })
+})
 
 app.listen(8000, () => {
     connect();
