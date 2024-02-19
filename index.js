@@ -21,6 +21,17 @@ const connect = () => {
         })
 }
 
+app.use((req, res, next) => {
+    // Allow cors
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
+
 // allows our app to send and receive cookies
 app.use(cookieParser())
 // this call allows app to take JSON requests as body
