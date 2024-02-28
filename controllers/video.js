@@ -7,7 +7,8 @@ export const addVideo = async (req, res, next) => {
         ...req.body
     })
     try {
-        const savedVideo = await Video.save();
+        const savedVideo = await newVideo.save();
+        console.log('After save fails');
         res.status(200).json(savedVideo);
     }catch(err) {
         next(err)
@@ -79,7 +80,6 @@ export const trend = async (req, res, next) => {
 export const random = async (req, res, next) => {
     try {
         const videos = await Video.aggregate([{$sample: {size: 40}}]);
-        console.log(videos, '123');
         res.status(200).json(videos)
     }catch(err) {
         next(err)

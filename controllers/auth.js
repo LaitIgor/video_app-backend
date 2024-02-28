@@ -48,7 +48,7 @@ export const signin = async (req, res, next) => {
 
 export const googleAuth = async (req, res, next) => {
     try {
-        const user = await User.findOne({email: 'req.body.email'});
+        const user = await User.findOne({email: req.body.email});
         if (user) {
             const token = jwt.sign({id: user._id.toString()}, 
                 process.env.JWT,
